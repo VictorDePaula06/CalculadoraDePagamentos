@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Borussia - Calculadora de Pagamento</title>
+    <!-- Inclui Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte Inter para todo o corpo do documento e adiciona transição */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease-in-out;
+            background-color: #000;
+            /* Cor preta do logo */
+            color: #fff;
+        }
+
+        /* Efeito de gradiente para o botão de login usando as cores do logo */
+        .btn-gradient {
+            background-image: linear-gradient(to right, #ffcc00, #ffb300, #ff9900);
+            box-shadow: 0 4px 15px 0 rgba(255, 179, 0, 0.5);
+        }
+
+        .btn-gradient:hover {
+            background-image: linear-gradient(to right, #ffb300, #ff9900, #e68a00);
+        }
+
+        .main-card {
+            background-color: #111;
+            /* Cinza escuro para a área principal, combinando com o fundo preto */
+            border-color: #ffcc00;
+            /* Cor de destaque do logo */
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Container principal com gradiente e borda sutil -->
+    <div id="mainContainer" class="main-card p-10 rounded-3xl shadow-2xl w-full max-w-xl border-2">
+
+        <!-- Tela de Login -->
+        <div id="loginScreen">
+            <div class="mb-8 text-center">
+                <img src="/imgs/WhatsApp Image 2025-07-31 at 9.27.04 PM.jpeg" alt="Logo da Arena Borussia"
+                    class="mx-auto mb-4 w-40 h-40 object-contain">
+                <h1 class="text-5xl font-extrabold tracking-wide text-[#ffcc00]">Arena Borussia</h1>
+            </div>
+            <p class="text-center text-gray-200 text-lg mb-8">Calculadora de Pagamento</p>
+
+            <div class="mb-6">
+                <label for="username" class="block text-[#ffcc00] text-sm font-medium mb-2">Usuário</label>
+                <input type="text" id="username"
+                    class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                    aria-label="Usuário">
+            </div>
+
+            <div class="mb-8">
+                <label for="password" class="block text-[#ffcc00] text-sm font-medium mb-2">Senha</label>
+                <input type="password" id="password"
+                    class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                    aria-label="Senha">
+            </div>
+
+            <button id="loginBtn"
+                class="btn-gradient text-gray-900 font-bold py-3 px-6 rounded-lg w-full transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-offset-2 focus:ring-offset-black">
+                Entrar
+            </button>
+
+            <!-- Mensagem de erro de login -->
+            <div id="loginError"
+                class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
+                Usuário ou senha incorretos.
+            </div>
+        </div>
+
+        <!-- Tela da Calculadora (inicialmente oculta) -->
+        <div id="calculatorScreen" class="hidden">
+            <div class="mb-8 text-center">
+                <img src="/imgs/WhatsApp Image 2025-07-31 at 9.27.04 PM.jpeg" alt="Logo da Arena Borussia"
+                    class="mx-auto mb-4 w-24 h-24 object-contain">
+                <h1 class="text-4xl font-extrabold text-center text-[#ffcc00]">Arena Borussia</h1>
+            </div>
+
+            <!-- Seletor de Professor -->
+            <div class="mb-6">
+                <label for="teacherSelector" class="block text-[#ffcc00] text-sm font-semibold mb-2">Selecione o
+                    Professor:</label>
+                <select id="teacherSelector"
+                    class="shadow-md appearance-none border border-gray-700 bg-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300">
+                    <option value="" disabled selected>-- Escolha um professor --</option>
+                    <option value="joao">João (R$ 400,00 Fixo)</option>
+                    <option value="miguel">Miguel (R$ 300,00 Fixo)</option>
+                    <option value="marcelo">Marcelo (R$ 15,00 por aula)</option>
+                    <option value="douglas">Douglas (R$ 20,00 por aluno)</option>
+                </select>
+            </div>
+
+            <!-- Campos de entrada dinâmicos que serão exibidos com base na seleção -->
+
+            <!-- Campos para pagamento fixo (João e Miguel) -->
+            <div id="fixedPaymentFields" class="hidden">
+                <div class="mb-4">
+                    <label for="fixedSalary" class="block text-[#ffcc00] text-sm font-semibold mb-2">Salário Fixo
+                        (R$):</label>
+                    <input type="number" id="fixedSalary" disabled
+                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                        aria-label="Salário Fixo">
+                </div>
+            </div>
+
+            <!-- Campos para pagamento por aula (Marcelo) -->
+            <div id="perClassFields" class="hidden">
+                <div class="mb-4">
+                    <label for="classesTaught" class="block text-[#ffcc00] text-sm font-semibold mb-2">Aulas
+                        Ministradas:</label>
+                    <input type="number" id="classesTaught" placeholder="Ex: 20"
+                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                        aria-label="Aulas Ministradas">
+                </div>
+                <div class="mb-4">
+                    <label for="ratePerClass" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aula
+                        (R$):</label>
+                    <input type="number" id="ratePerClass" value="15.00" disabled
+                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                        aria-label="Valor por Aula">
+                </div>
+            </div>
+
+            <!-- Campos para pagamento por aluno (Douglas) -->
+            <div id="perStudentFields" class="hidden">
+                <div class="mb-4">
+                    <label for="numberOfStudents" class="block text-[#ffcc00] text-sm font-semibold mb-2">Número de
+                        Alunos:</label>
+                    <input type="number" id="numberOfStudents" placeholder="Ex: 15"
+                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                        aria-label="Número de Alunos">
+                </div>
+                <div class="mb-4">
+                    <label for="ratePerStudent" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aluno
+                        (R$):</label>
+                    <input type="number" id="ratePerStudent" value="20.00" disabled
+                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                        aria-label="Valor por Aluno">
+                </div>
+            </div>
+
+            <!-- Campo para dias de falta, visível para todos os tipos de pagamento -->
+            <div id="absencesField" class="hidden">
+                <div class="mb-4">
+                    <label for="absences" class="block text-[#ffcc00] text-sm font-semibold mb-2">Dias de Falta (cada
+                        dia = 1 hora de desconto):</label>
+                    <input type="number" id="absences" placeholder="Ex: 2" value="0"
+                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                        aria-label="Dias de Falta">
+                </div>
+                <div class="mb-6">
+                    <label for="deductionPerAbsence" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor de
+                        Desconto por Falta (R$):</label>
+                    <input type="number" id="deductionPerAbsence" placeholder="Ex: 10.00" value="10.00" step="0.01"
+                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                        aria-label="Valor de Desconto por Falta">
+                </div>
+            </div>
+
+            <!-- Botão para calcular -->
+            <button id="calculateBtn"
+                class="bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-opacity-50 transition duration-300 ease-in-out">
+                Calcular Pagamento
+            </button>
+
+            <!-- Área para exibir o resultado -->
+            <div id="result" class="mt-8 p-6 bg-gray-700 rounded-lg text-[#ffcc00] text-lg font-semibold hidden">
+                <!-- O resultado do cálculo e a mensagem serão exibidos aqui -->
+            </div>
+
+            <!-- Botão de cópia, visível apenas com o resultado -->
+            <button id="copyBtn"
+                class="mt-4 bg-gray-600 hover:bg-gray-500 text-gray-200 font-bold py-3 px-6 rounded-lg w-full hidden transition duration-300 ease-in-out">
+                Copiar Mensagem
+            </button>
+
+            <!-- Mensagem de erro (oculta por padrão) -->
+            <div id="errorMessage"
+                class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
+                <!-- O erro será exibido aqui -->
+            </div>
+        </div>
+
+        <!-- Modal customizado para feedback de cópia -->
+        <div id="copyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-gray-800 p-8 rounded-lg shadow-xl border border-[#ffcc00]/20 text-center">
+                <p class="text-xl text-[#ffcc00] font-bold">Mensagem copiada para a área de transferência!</p>
+                <button id="closeModalBtn"
+                    class="mt-6 bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-2 px-4 rounded-lg">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtém referências para os elementos HTML
+        const loginScreen = document.getElementById('loginScreen');
+        const calculatorScreen = document.getElementById('calculatorScreen');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+
+        const teacherSelector = document.getElementById('teacherSelector');
+        const fixedPaymentFields = document.getElementById('fixedPaymentFields');
+        const perClassFields = document.getElementById('perClassFields');
+        const perStudentFields = document.getElementById('perStudentFields');
+        const absencesField = document.getElementById('absencesField');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const resultDiv = document.getElementById('result');
+        const errorMessageDiv = document.getElementById('errorMessage');
+        const copyModal = document.getElementById('copyModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        const fixedSalaryInput = document.getElementById('fixedSalary');
+        const classesTaughtInput = document.getElementById('classesTaught');
+        const numberOfStudentsInput = document.getElementById('numberOfStudents');
+        const absencesInput = document.getElementById('absences');
+        const deductionPerAbsenceInput = document.getElementById('deductionPerAbsence');
+
+        let calculationDetails = {}; // Objeto para armazenar os detalhes do cálculo
+
+        // Adiciona um listener para o botão de login
+        loginBtn.addEventListener('click', handleLogin);
+        // Permite o login ao pressionar a tecla 'Enter' nos campos de input
+        usernameInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') handleLogin();
+        });
+        passwordInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') handleLogin();
+        });
+
+        // Adiciona um listener para o seletor de professor
+        teacherSelector.addEventListener('change', showRelevantFields);
+
+        // Adiciona um listener de evento ao botão de cálculo
+        calculateBtn.addEventListener('click', calculatePayment);
+
+        // Adiciona um listener ao botão de cópia
+        copyBtn.addEventListener('click', copyToClipboard);
+
+        // Adiciona um listener para fechar o modal
+        closeModalBtn.addEventListener('click', () => copyModal.classList.add('hidden'));
+
+        /**
+         * Lida com a lógica de login e mostra a calculadora se as credenciais estiverem corretas.
+         */
+        function handleLogin() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            // Credenciais hardcoded
+            const correctUsername = 'Borussia';
+            const correctPassword = '01092024';
+
+            // Verifica se as credenciais estão corretas
+            if (username === correctUsername && password === correctPassword) {
+                // Esconde a tela de login e mostra a calculadora
+                loginScreen.classList.add('hidden');
+                calculatorScreen.classList.remove('hidden');
+            } else {
+                // Mostra mensagem de erro
+                loginError.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Exibe os campos de entrada relevantes com base no professor selecionado.
+         */
+        function showRelevantFields() {
+            // Esconde todos os campos primeiro
+            fixedPaymentFields.classList.add('hidden');
+            perClassFields.classList.add('hidden');
+            perStudentFields.classList.add('hidden');
+            absencesField.classList.add('hidden');
+            resultDiv.classList.add('hidden');
+            copyBtn.classList.add('hidden');
+            errorMessageDiv.classList.add('hidden');
+            resultDiv.textContent = ''; // Limpa o resultado anterior
+
+            const selectedTeacher = teacherSelector.value;
+
+            // Define os salários fixos ou valores por aula/aluno
+            switch (selectedTeacher) {
+                case 'joao':
+                    fixedSalaryInput.value = '400.00';
+                    fixedPaymentFields.classList.remove('hidden');
+                    absencesField.classList.remove('hidden');
+                    break;
+                case 'miguel':
+                    fixedSalaryInput.value = '300.00';
+                    fixedPaymentFields.classList.remove('hidden');
+                    absencesField.classList.remove('hidden');
+                    break;
+                case 'marcelo':
+                    perClassFields.classList.remove('hidden');
+                    absencesField.classList.remove('hidden');
+                    break;
+                case 'douglas':
+                    perStudentFields.classList.remove('hidden');
+                    absencesField.classList.remove('hidden');
+                    break;
+            }
+        }
+
+        /**
+         * Calcula o pagamento do professor e gera a mensagem localmente.
+         */
+        function calculatePayment() {
+            // Limpa resultados e mensagens anteriores
+            resultDiv.classList.add('hidden');
+            copyBtn.classList.add('hidden');
+            errorMessageDiv.classList.add('hidden');
+            resultDiv.textContent = '';
+
+            const selectedTeacher = teacherSelector.value;
+            if (!selectedTeacher) {
+                errorMessageDiv.textContent = 'Por favor, selecione um professor.';
+                errorMessageDiv.classList.remove('hidden');
+                return;
+            }
+
+            let totalPayment = 0;
+            const absences = parseFloat(absencesInput.value);
+            const deductionPerAbsence = parseFloat(deductionPerAbsenceInput.value);
+            let calculationDescription = '';
+
+            // Validação de entrada para faltas e desconto
+            if (isNaN(absences) || isNaN(deductionPerAbsence)) {
+                errorMessageDiv.textContent = 'Por favor, preencha os campos de falta com números válidos.';
+                errorMessageDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Lógica de cálculo com base no professor
+            switch (selectedTeacher) {
+                case 'joao':
+                    const fixedSalaryJoao = 400;
+                    totalPayment = fixedSalaryJoao - (absences * deductionPerAbsence);
+                    calculationDescription = `
+Olá, João!
+
+Segue o detalhe do seu pagamento:
+- Salário fixo: R$ ${fixedSalaryJoao.toFixed(2).replace('.', ',')}
+- Desconto por faltas (${absences} dias): R$ ${(absences * deductionPerAbsence).toFixed(2).replace('.', ',')}
+- Total a receber: R$ ${Math.max(0, totalPayment).toFixed(2).replace('.', ',')}
+`;
+                    break;
+                case 'miguel':
+                    const fixedSalaryMiguel = 300;
+                    totalPayment = fixedSalaryMiguel - (absences * deductionPerAbsence);
+                    calculationDescription = `
+Olá, Miguel!
+
+Segue o detalhe do seu pagamento:
+- Salário fixo: R$ ${fixedSalaryMiguel.toFixed(2).replace('.', ',')}
+- Desconto por faltas (${absences} dias): R$ ${(absences * deductionPerAbsence).toFixed(2).replace('.', ',')}
+- Total a receber: R$ ${Math.max(0, totalPayment).toFixed(2).replace('.', ',')}
+`;
+                    break;
+                case 'marcelo':
+                    const classesTaught = parseFloat(classesTaughtInput.value);
+                    if (isNaN(classesTaught)) {
+                        errorMessageDiv.textContent = 'Por favor, preencha o número de aulas com um valor válido.';
+                        errorMessageDiv.classList.remove('hidden');
+                        return;
+                    }
+                    const ratePerClass = 15;
+                    const paidClasses = Math.max(0, classesTaught - absences);
+                    totalPayment = paidClasses * ratePerClass;
+                    calculationDescription = `
+Olá, Marcelo!
+
+Segue o detalhe do seu pagamento:
+- Aulas ministradas: ${classesTaught}
+- Aulas pagas (após desconto de faltas): ${paidClasses}
+- Valor por aula: R$ ${ratePerClass.toFixed(2).replace('.', ',')}
+- Total a receber: R$ ${Math.max(0, totalPayment).toFixed(2).replace('.', ',')}
+`;
+                    break;
+                case 'douglas':
+                    const numberOfStudents = parseFloat(numberOfStudentsInput.value);
+                    if (isNaN(numberOfStudents)) {
+                        errorMessageDiv.textContent = 'Por favor, preencha o número de alunos com um valor válido.';
+                        errorMessageDiv.classList.remove('hidden');
+                        return;
+                    }
+                    const ratePerStudent = 20;
+                    const basePayment = numberOfStudents * ratePerStudent;
+                    totalPayment = basePayment - (absences * deductionPerAbsence);
+                    calculationDescription = `
+Olá, Douglas!
+
+Segue o detalhe do seu pagamento:
+- Base de pagamento (por aluno): ${numberOfStudents} alunos x R$ ${ratePerStudent.toFixed(2).replace('.', ',')} = R$ ${basePayment.toFixed(2).replace('.', ',')}
+- Desconto por faltas (${absences} dias): R$ ${(absences * deductionPerAbsence).toFixed(2).replace('.', ',')}
+- Total a receber: R$ ${Math.max(0, totalPayment).toFixed(2).replace('.', ',')}
+`;
+                    break;
+            }
+
+            // Exibe o resultado e a mensagem gerada localmente
+            resultDiv.innerHTML = `<h3 class="text-xl font-bold mb-2">Pagamento Calculado</h3><p class="whitespace-pre-wrap">${calculationDescription}</p>`;
+            resultDiv.classList.remove('hidden');
+            copyBtn.classList.remove('hidden'); // Mostra o botão de cópia
+        }
+
+        /**
+         * Copia o texto da mensagem gerada para a área de transferência.
+         */
+        function copyToClipboard() {
+            const textToCopy = resultDiv.textContent;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            copyModal.classList.remove('hidden'); // Mostra o modal customizado
+        }
+    </script>
+</body>
+
+</html>
