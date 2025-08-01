@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,65 +12,114 @@
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease-in-out;
             background-color: #000;
-            /* Cor preta do logo */
             color: #fff;
+            /* overflow: hidden; /* Removido para permitir rolagem */
         }
-
+        /* Estilo para a animação de fundo */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 204, 0, 0.2);
+            border-radius: 50%;
+            animation: move-particles 20s infinite linear;
+        }
+        @keyframes move-particles {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
         /* Efeito de gradiente para o botão de login usando as cores do logo */
         .btn-gradient {
             background-image: linear-gradient(to right, #ffcc00, #ffb300, #ff9900);
             box-shadow: 0 4px 15px 0 rgba(255, 179, 0, 0.5);
         }
-
         .btn-gradient:hover {
             background-image: linear-gradient(to right, #ffb300, #ff9900, #e68a00);
         }
-
         .main-card {
             background-color: #111;
-            /* Cinza escuro para a área principal, combinando com o fundo preto */
             border-color: #ffcc00;
-            /* Cor de destaque do logo */
+        }
+        /* Estilos para os botões dos professores */
+        .teacher-btn {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #ffcc00;
+        }
+        .teacher-btn:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        .teacher-btn.active {
+            background-color: #ffcc00;
+            color: #000;
+            border-color: #ffcc00;
+        }
+
+        /* Estilos para impressão */
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+            #mainContainer, .animated-background, #calculatorScreen button {
+                display: none;
+            }
+            #printContent {
+                display: block !important;
+                margin: 2rem;
+                padding: 1rem;
+                border: 1px solid #ccc;
+                font-family: monospace;
+            }
         }
     </style>
 </head>
-
 <body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Animação de fundo -->
+    <div id="animatedBackground" class="animated-background"></div>
 
     <!-- Container principal com gradiente e borda sutil -->
     <div id="mainContainer" class="main-card p-10 rounded-3xl shadow-2xl w-full max-w-xl border-2">
-
+        
         <!-- Tela de Login -->
         <div id="loginScreen">
             <div class="mb-8 text-center">
-                <img src="./imgs/WhatsApp Image 2025-07-31 at 9.27.04 PM.jpeg" alt="Logo da Arena Borussia"
-                    class="mx-auto mb-4 w-40 h-40 object-contain">
+                <img src="/download/uploaded:image_cc0959.png-20c26217-d024-4f65-80d7-40f5e865f363" alt="Logo da Arena Borussia" class="mx-auto mb-4 w-40 h-40 object-contain">
                 <h1 class="text-5xl font-extrabold tracking-wide text-[#ffcc00]">Arena Borussia</h1>
             </div>
             <p class="text-center text-gray-200 text-lg mb-8">Calculadora de Pagamento</p>
-
+            
             <div class="mb-6">
                 <label for="username" class="block text-[#ffcc00] text-sm font-medium mb-2">Usuário</label>
                 <input type="text" id="username"
-                    class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                    aria-label="Usuário">
+                       class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                       aria-label="Usuário">
             </div>
 
             <div class="mb-8">
                 <label for="password" class="block text-[#ffcc00] text-sm font-medium mb-2">Senha</label>
                 <input type="password" id="password"
-                    class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                    aria-label="Senha">
+                       class="shadow-lg appearance-none border border-gray-700 bg-gray-700/50 backdrop-blur-sm rounded-lg w-full py-3 px-4 text-[#ffcc00] placeholder-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                       aria-label="Senha">
             </div>
-
+            
             <button id="loginBtn"
-                class="btn-gradient text-gray-900 font-bold py-3 px-6 rounded-lg w-full transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-offset-2 focus:ring-offset-black">
+                    class="btn-gradient text-gray-900 font-bold py-3 px-6 rounded-lg w-full transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-offset-2 focus:ring-offset-black">
                 Entrar
             </button>
 
             <!-- Mensagem de erro de login -->
-            <div id="loginError"
-                class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
+            <div id="loginError" class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
                 Usuário ou senha incorretos.
             </div>
         </div>
@@ -79,112 +127,112 @@
         <!-- Tela da Calculadora (inicialmente oculta) -->
         <div id="calculatorScreen" class="hidden">
             <div class="mb-8 text-center">
-                <img src="./imgs/WhatsApp Image 2025-07-31 at 9.27.04 PM.jpeg" alt="Logo da Arena Borussia"
-                    class="mx-auto mb-4 w-24 h-24 object-contain">
+                <img src="/download/uploaded:image_cc0959.png-20c26217-d024-4f65-80d7-40f5e865f363" alt="Logo da Arena Borussia" class="mx-auto mb-4 w-24 h-24 object-contain">
                 <h1 class="text-4xl font-extrabold text-center text-[#ffcc00]">Arena Borussia</h1>
             </div>
 
-            <!-- Seletor de Professor -->
+            <!-- Botões dos professores -->
             <div class="mb-6">
-                <label for="teacherSelector" class="block text-[#ffcc00] text-sm font-semibold mb-2">Selecione o
-                    Professor:</label>
-                <select id="teacherSelector"
-                    class="shadow-md appearance-none border border-gray-700 bg-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300">
-                    <option value="" disabled selected>-- Escolha um professor --</option>
-                    <option value="joao">João (R$ 400,00 Fixo)</option>
-                    <option value="miguel">Miguel (R$ 300,00 Fixo)</option>
-                    <option value="marcelo">Marcelo (R$ 15,00 por aula)</option>
-                    <option value="douglas">Douglas (R$ 20,00 por aluno)</option>
-                </select>
+                <label class="block text-[#ffcc00] text-sm font-semibold mb-2">Selecione o Professor:</label>
+                <div id="teacherButtons" class="flex flex-wrap gap-2 justify-center">
+                    <button class="teacher-btn py-3 px-6 rounded-lg font-bold w-full md:w-auto transition duration-300" data-teacher="joao">João</button>
+                    <button class="teacher-btn py-3 px-6 rounded-lg font-bold w-full md:w-auto transition duration-300" data-teacher="miguel">Miguel</button>
+                    <button class="teacher-btn py-3 px-6 rounded-lg font-bold w-full md:w-auto transition duration-300" data-teacher="marcelo">Marcelo</button>
+                    <button class="teacher-btn py-3 px-6 rounded-lg font-bold w-full md:w-auto transition duration-300" data-teacher="douglas">Douglas</button>
+                </div>
             </div>
 
             <!-- Campos de entrada dinâmicos que serão exibidos com base na seleção -->
-
+            
             <!-- Campos para pagamento fixo (João e Miguel) -->
             <div id="fixedPaymentFields" class="hidden">
                 <div class="mb-4">
-                    <label for="fixedSalary" class="block text-[#ffcc00] text-sm font-semibold mb-2">Salário Fixo
-                        (R$):</label>
+                    <label for="fixedSalary" class="block text-[#ffcc00] text-sm font-semibold mb-2">Salário Fixo (R$):</label>
                     <input type="number" id="fixedSalary" disabled
-                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
-                        aria-label="Salário Fixo">
+                           class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                           aria-label="Salário Fixo">
                 </div>
             </div>
 
             <!-- Campos para pagamento por aula (Marcelo) -->
             <div id="perClassFields" class="hidden">
                 <div class="mb-4">
-                    <label for="classesTaught" class="block text-[#ffcc00] text-sm font-semibold mb-2">Aulas
-                        Ministradas:</label>
+                    <label for="classesTaught" class="block text-[#ffcc00] text-sm font-semibold mb-2">Aulas Ministradas:</label>
                     <input type="number" id="classesTaught" placeholder="Ex: 20"
-                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                        aria-label="Aulas Ministradas">
+                           class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                           aria-label="Aulas Ministradas">
                 </div>
                 <div class="mb-4">
-                    <label for="ratePerClass" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aula
-                        (R$):</label>
+                    <label for="ratePerClass" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aula (R$):</label>
                     <input type="number" id="ratePerClass" value="15.00" disabled
-                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
-                        aria-label="Valor por Aula">
+                           class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                           aria-label="Valor por Aula">
                 </div>
             </div>
 
             <!-- Campos para pagamento por aluno (Douglas) -->
             <div id="perStudentFields" class="hidden">
                 <div class="mb-4">
-                    <label for="numberOfStudents" class="block text-[#ffcc00] text-sm font-semibold mb-2">Número de
-                        Alunos:</label>
+                    <label for="numberOfStudents" class="block text-[#ffcc00] text-sm font-semibold mb-2">Número de Alunos:</label>
                     <input type="number" id="numberOfStudents" placeholder="Ex: 15"
-                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                        aria-label="Número de Alunos">
+                           class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                           aria-label="Número de Alunos">
                 </div>
                 <div class="mb-4">
-                    <label for="ratePerStudent" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aluno
-                        (R$):</label>
+                    <label for="ratePerStudent" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor por Aluno (R$):</label>
                     <input type="number" id="ratePerStudent" value="20.00" disabled
-                        class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
-                        aria-label="Valor por Aluno">
+                           class="shadow appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none"
+                           aria-label="Valor por Aluno">
                 </div>
             </div>
-
+            
             <!-- Campo para dias de falta, visível para todos os tipos de pagamento -->
             <div id="absencesField" class="hidden">
                 <div class="mb-4">
-                    <label for="absences" class="block text-[#ffcc00] text-sm font-semibold mb-2">Dias de Falta (cada
-                        dia = 1 hora de desconto):</label>
+                    <label for="absences" class="block text-[#ffcc00] text-sm font-semibold mb-2">Dias de Falta (cada dia = 1 hora de desconto):</label>
                     <input type="number" id="absences" placeholder="Ex: 2" value="0"
-                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                        aria-label="Dias de Falta">
+                           class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                           aria-label="Dias de Falta">
                 </div>
                 <div class="mb-6">
-                    <label for="deductionPerAbsence" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor de
-                        Desconto por Falta (R$):</label>
+                    <label for="deductionPerAbsence" class="block text-[#ffcc00] text-sm font-semibold mb-2">Valor de Desconto por Falta (R$):</label>
                     <input type="number" id="deductionPerAbsence" placeholder="Ex: 10.00" value="10.00" step="0.01"
-                        class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
-                        aria-label="Valor de Desconto por Falta">
+                           class="shadow-md appearance-none border border-gray-700 rounded-lg w-full py-3 px-4 text-[#ffcc00] bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#ffcc00] transition duration-300"
+                           aria-label="Valor de Desconto por Falta">
                 </div>
             </div>
 
-            <!-- Botão para calcular -->
-            <button id="calculateBtn"
-                class="bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-opacity-50 transition duration-300 ease-in-out">
-                Calcular Pagamento
-            </button>
+            <div class="flex gap-4">
+                <!-- Botão para calcular -->
+                <button id="calculateBtn"
+                        class="bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:ring-opacity-50 transition duration-300 ease-in-out">
+                    Calcular Pagamento
+                </button>
+                
+                <!-- Botão para limpar dados -->
+                <button id="clearBtn"
+                        class="bg-gray-600 hover:bg-gray-500 text-gray-200 font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition duration-300 ease-in-out">
+                    Limpar Dados
+                </button>
+            </div>
 
             <!-- Área para exibir o resultado -->
             <div id="result" class="mt-8 p-6 bg-gray-700 rounded-lg text-[#ffcc00] text-lg font-semibold hidden">
                 <!-- O resultado do cálculo e a mensagem serão exibidos aqui -->
             </div>
-
-            <!-- Botão de cópia, visível apenas com o resultado -->
-            <button id="copyBtn"
-                class="mt-4 bg-gray-600 hover:bg-gray-500 text-gray-200 font-bold py-3 px-6 rounded-lg w-full hidden transition duration-300 ease-in-out">
-                Copiar Mensagem
-            </button>
+            
+            <!-- Botões para interagir com o resultado -->
+            <div id="resultActions" class="flex gap-4 mt-4 hidden">
+                <button id="copyBtn" class="bg-gray-600 hover:bg-gray-500 text-gray-200 font-bold py-3 px-6 rounded-lg w-full transition duration-300 ease-in-out">
+                    Copiar Mensagem
+                </button>
+                <button id="printBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg w-full transition duration-300 ease-in-out">
+                    Imprimir Resumo
+                </button>
+            </div>
 
             <!-- Mensagem de erro (oculta por padrão) -->
-            <div id="errorMessage"
-                class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
+            <div id="errorMessage" class="mt-6 p-4 bg-red-700/30 border border-red-600 text-red-200 rounded-lg text-center hidden transition-all duration-300">
                 <!-- O erro será exibido aqui -->
             </div>
         </div>
@@ -193,13 +241,16 @@
         <div id="copyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
             <div class="bg-gray-800 p-8 rounded-lg shadow-xl border border-[#ffcc00]/20 text-center">
                 <p class="text-xl text-[#ffcc00] font-bold">Mensagem copiada para a área de transferência!</p>
-                <button id="closeModalBtn"
-                    class="mt-6 bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-2 px-4 rounded-lg">
+                <button id="closeModalBtn" class="mt-6 bg-[#ffcc00] hover:bg-[#ffb300] text-gray-900 font-bold py-2 px-4 rounded-lg">
                     OK
                 </button>
             </div>
         </div>
     </div>
+    
+    <!-- Conteúdo para impressão, oculto na tela -->
+    <div id="printContent" class="hidden"></div>
+
 
     <script>
         // Obtém referências para os elementos HTML
@@ -210,25 +261,53 @@
         const loginBtn = document.getElementById('loginBtn');
         const loginError = document.getElementById('loginError');
 
-        const teacherSelector = document.getElementById('teacherSelector');
+        const teacherButtonsContainer = document.getElementById('teacherButtons');
         const fixedPaymentFields = document.getElementById('fixedPaymentFields');
         const perClassFields = document.getElementById('perClassFields');
         const perStudentFields = document.getElementById('perStudentFields');
         const absencesField = document.getElementById('absencesField');
         const calculateBtn = document.getElementById('calculateBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const copyBtn = document.getElementById('copyBtn');
+        const printBtn = document.getElementById('printBtn');
         const resultDiv = document.getElementById('result');
         const errorMessageDiv = document.getElementById('errorMessage');
         const copyModal = document.getElementById('copyModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
+        const resultActionsDiv = document.getElementById('resultActions');
+        const printContentDiv = document.getElementById('printContent');
+        const animatedBackground = document.getElementById('animatedBackground');
 
         const fixedSalaryInput = document.getElementById('fixedSalary');
         const classesTaughtInput = document.getElementById('classesTaught');
         const numberOfStudentsInput = document.getElementById('numberOfStudents');
         const absencesInput = document.getElementById('absences');
         const deductionPerAbsenceInput = document.getElementById('deductionPerAbsence');
-
+        
         let calculationDetails = {}; // Objeto para armazenar os detalhes do cálculo
+        let selectedTeacherValue = ''; // Variável para armazenar o professor selecionado
+
+        // Inicializa a animação de fundo
+        window.onload = function() {
+            createParticles();
+        };
+
+        /**
+         * Cria as partículas para a animação de fundo.
+         */
+        function createParticles() {
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = `${Math.random() * 5 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100 + 100}vh`; // Inicia fora da tela
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                animatedBackground.appendChild(particle);
+            }
+        }
+
 
         // Adiciona um listener para o botão de login
         loginBtn.addEventListener('click', handleLogin);
@@ -240,14 +319,31 @@
             if (event.key === 'Enter') handleLogin();
         });
 
-        // Adiciona um listener para o seletor de professor
-        teacherSelector.addEventListener('change', showRelevantFields);
+        // Adiciona um listener de clique aos botões dos professores
+        teacherButtonsContainer.addEventListener('click', (event) => {
+            const clickedButton = event.target.closest('button');
+            if (!clickedButton) return;
+            
+            // Remove a classe 'active' de todos os botões
+            document.querySelectorAll('.teacher-btn').forEach(btn => btn.classList.remove('active'));
+            // Adiciona a classe 'active' ao botão clicado
+            clickedButton.classList.add('active');
 
+            selectedTeacherValue = clickedButton.getAttribute('data-teacher');
+            showRelevantFields(selectedTeacherValue);
+        });
+        
         // Adiciona um listener de evento ao botão de cálculo
         calculateBtn.addEventListener('click', calculatePayment);
 
+        // Adiciona um listener ao botão de limpar
+        clearBtn.addEventListener('click', clearAllFields);
+
         // Adiciona um listener ao botão de cópia
         copyBtn.addEventListener('click', copyToClipboard);
+
+        // Adiciona um listener ao botão de imprimir
+        printBtn.addEventListener('click', printSummary);
 
         // Adiciona um listener para fechar o modal
         closeModalBtn.addEventListener('click', () => copyModal.classList.add('hidden'));
@@ -277,21 +373,19 @@
         /**
          * Exibe os campos de entrada relevantes com base no professor selecionado.
          */
-        function showRelevantFields() {
+        function showRelevantFields(teacher) {
             // Esconde todos os campos primeiro
             fixedPaymentFields.classList.add('hidden');
             perClassFields.classList.add('hidden');
             perStudentFields.classList.add('hidden');
             absencesField.classList.add('hidden');
             resultDiv.classList.add('hidden');
-            copyBtn.classList.add('hidden');
+            resultActionsDiv.classList.add('hidden');
             errorMessageDiv.classList.add('hidden');
             resultDiv.textContent = ''; // Limpa o resultado anterior
-
-            const selectedTeacher = teacherSelector.value;
-
+            
             // Define os salários fixos ou valores por aula/aluno
-            switch (selectedTeacher) {
+            switch(teacher) {
                 case 'joao':
                     fixedSalaryInput.value = '400.00';
                     fixedPaymentFields.classList.remove('hidden');
@@ -319,12 +413,11 @@
         function calculatePayment() {
             // Limpa resultados e mensagens anteriores
             resultDiv.classList.add('hidden');
-            copyBtn.classList.add('hidden');
+            resultActionsDiv.classList.add('hidden');
             errorMessageDiv.classList.add('hidden');
             resultDiv.textContent = '';
-
-            const selectedTeacher = teacherSelector.value;
-            if (!selectedTeacher) {
+            
+            if (!selectedTeacherValue) {
                 errorMessageDiv.textContent = 'Por favor, selecione um professor.';
                 errorMessageDiv.classList.remove('hidden');
                 return;
@@ -343,7 +436,7 @@
             }
 
             // Lógica de cálculo com base no professor
-            switch (selectedTeacher) {
+            switch(selectedTeacherValue) {
                 case 'joao':
                     const fixedSalaryJoao = 400;
                     totalPayment = fixedSalaryJoao - (absences * deductionPerAbsence);
@@ -412,9 +505,34 @@ Segue o detalhe do seu pagamento:
             // Exibe o resultado e a mensagem gerada localmente
             resultDiv.innerHTML = `<h3 class="text-xl font-bold mb-2">Pagamento Calculado</h3><p class="whitespace-pre-wrap">${calculationDescription}</p>`;
             resultDiv.classList.remove('hidden');
-            copyBtn.classList.remove('hidden'); // Mostra o botão de cópia
+            resultActionsDiv.classList.remove('hidden'); // Mostra os botões de ação
         }
 
+        /**
+         * Limpa todos os campos de entrada e esconde os resultados.
+         */
+        function clearAllFields() {
+            // Limpa os inputs
+            fixedSalaryInput.value = '';
+            classesTaughtInput.value = '';
+            numberOfStudentsInput.value = '';
+            absencesInput.value = '0';
+            deductionPerAbsenceInput.value = '10.00';
+            
+            // Esconde todos os campos e resultados
+            fixedPaymentFields.classList.add('hidden');
+            perClassFields.classList.add('hidden');
+            perStudentFields.classList.add('hidden');
+            absencesField.classList.add('hidden');
+            resultDiv.classList.add('hidden');
+            resultActionsDiv.classList.add('hidden');
+            errorMessageDiv.classList.add('hidden');
+            
+            // Remove a seleção de todos os botões de professor
+            document.querySelectorAll('.teacher-btn').forEach(btn => btn.classList.remove('active'));
+            selectedTeacherValue = ''; // Reseta a variável de seleção
+        }
+        
         /**
          * Copia o texto da mensagem gerada para a área de transferência.
          */
@@ -428,7 +546,23 @@ Segue o detalhe do seu pagamento:
             document.body.removeChild(tempInput);
             copyModal.classList.remove('hidden'); // Mostra o modal customizado
         }
+
+        /**
+         * Prepara e imprime o resumo do pagamento.
+         */
+        function printSummary() {
+            const content = resultDiv.innerHTML;
+            printContentDiv.innerHTML = `
+                <div class="text-center mb-6">
+                    <img src="/download/uploaded:image_cc0959.png-20c26217-d024-4f65-80d7-40f5e865f363" alt="Logo da Arena Borussia" class="mx-auto mb-2 w-20 h-20 object-contain">
+                    <h2 class="text-2xl font-bold text-black">Arena Borussia</h2>
+                </div>
+                <hr class="border-black mb-4">
+                ${content}
+            `;
+            window.print();
+        }
+
     </script>
 </body>
-
 </html>
